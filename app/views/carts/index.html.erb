@@ -1,111 +1,52 @@
-<div class="row">
-  <div class="col-md-12">
 
-    <%= link_to("清空购物车", clean_carts_path ,
-                  method: :delete , class: "pull-right",
-                  style: "text-decoration: underline;",
-                  data: { confirm: "你确定要清空整个购物车吗？"} )%>
 
-    <h2> 购物车 </h2>
-    <div class="container">
+<div class="container">
+  <h3 style="color: #959595;">购物车</h3>
+  <hr>
+
+  <div class="cart_items col-md-8">
+
+    <% current_cart.cart_items.each do |cart_item| %>
       <div class="row">
-        <% current_cart.cart_items.each do |cart_item| %>
-          <div class="box-left col-md-8">
-            <div class="col-md-offset-3 col-md-5" style="margin-bottom: 4px;">
-              <%= link_to product_path(cart_item.product) do %>
-                <% if cart_item.product.photos.present? %>
-                  <%= image_tag(cart_item.product.photos[0].avatar.url(:thumb), class:"img-rounded", style:"width: 250px; height: 250px; display: block; margin: 0 auto;") %>
-                <% else %>
-                  <%= image_tag("http://placehold.it/200x200&text=No Pic", class: "img-rounded") %>
-                <% end %>
-              <% end %>
-            </div>
-            <div class="col-md-4">
-              <ul class="list-group" style="text-align: center;">
-                <li class="list-group-item">
-                  <h3>商品信息</h3>
-                </li>
-                <li class="list-group-item">
-                  <h4>单价 ¥<%= cart_item.product.price %></h4>
-                </li>
-                <li class="list-group-item">
-                  <%= form_for cart_item, url: cart_item_path(cart_item.product_id) do |f| %>
-                  <%= f.select :quantity, 1..cart_item.product.quantity %>
-                  <%= f.submit "更新", data: { disable_with: "Submiting..." } %>
-                  <% end %>
-                </li>
-                <li class="list-group-item">
-                  <%= link_to cart_item_path(cart_item.product_id), method: :delete do %>
-                    <i class="fa fa-trash"></i>
-                  <% end %>
-                </li>
-              </ul>
-            </div>
-          </div>
-        <% end %>
-        <div class="box-right col-md-4" style="background-color:blue;">
-
+        <div class="product_image col-md-4">
+          <%= link_to product_path(cart_item.product) do %>
+            <% if cart_item.product.photos.present? %>
+              <%= image_tag(cart_item.product.photos[0].avatar.url(:thumb), class:"img-rounded", style:"width: 120px; height: 120px;") %>
+            <% else %>
+              <%= image_tag("http://placehold.it/200x200&text=No Pic", class: "img-rounded") %>
+            <% end %>
+          <% end %>
+        </div>
+        <div class="product_content col-md-2" style="color: #959595;">
+          <h4><%= cart_item.product.title %></h4>
+          <p><%= cart_item.product.description %></p>
+        </div>
+        <div class="product_quantity col-md-4">
+          <%= link_to("-", remove_quantity_cart_item_path(cart_item.product_id), class: "cart-quantity-actions", method: :post) %>
+          <input class="cart-quantity-input" type="text" value="<%= cart_item.quantity %>">
+          <%= link_to("+", add_quantity_cart_item_path(cart_item.product_id), class: "cart-quantity-actions", method: :post) %>
+        </div>
+        <div class="cart_product_delete col-md-2">
+          <%= link_to cart_item_path(cart_item.product_id), class: "item-remove btn btn-xs  btn-danger", :data => { :confirm => "确认要将该商品移出购物车吗？" } ,method: :delete do %>
+            <i class="fa fa-trash-o fa-fw"></i>
+          <% end %>
         </div>
       </div>
+      <hr>
+    <% end %>
+  </div>
 
-    </div>
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th colspan="2">商品资讯</th>
-          <th>单价</th>
-          <th>数量</th>
-          <th>操作选项</th>
-        </tr>
-      </thead>
-      <tbody>
+  <div class="bill">
+    <h2 class="bill_title">结算</h2>
+    <hr style="margin: 5px;">
+    <p class="total_price">
+       总计 <span style="font-weight: bold;"><%= render_cart_total_price(current_cart) %></span> RMB
+    </p>
+    <br><br>
+    <div class="cart_button">
+      <%= link_to("清空购物车", clean_carts_path, method: :delete, class: "btn btn-danger", data: {confirm: "确认要清空购物车吗"}) %>
+      <%= link_to("马上结帐", checkout_carts_path, method: :post, class: "btn btn-success") %>
 
-        <% current_cart.cart_items.each do |cart_item| %>
-          <tr>
-            <td>
-              <%= link_to product_path(cart_item.product) do %>
-                <% if cart_item.product.photos.present? %>
-                  <%= image_tag(cart_item.product.photos[0].avatar.url(:thumb), class: "thumbnail") %>
-                <% else %>
-                  <%= image_tag("http://placehold.it/200x200&text=No Pic", class: "thumbnail") %>
-                <% end %>
-              <% end %>
-            </td>
-            <td>
-              <%= link_to(cart_item.product.title, product_path(cart_item.product)) %>
-            </td>
-            <td>
-              <%= cart_item.product.price %>
-            </td>
-            <td>
-              <%= form_for cart_item, url: cart_item_path(cart_item.product_id) do |f| %>
-              <%= f.select :quantity, 1..cart_item.product.quantity %>
-              <%= f.submit "更新", data: { disable_with: "Submiting..." } %>
-              <% end %>
-            </td>
-            <td>
-             <%= link_to cart_item_path(cart_item.product_id), method: :delete do %>
-               <i class="fa fa-trash"></i>
-             <% end %>
-           </td>
-          </tr>
-        <% end %>
-
-      </tbody>
-    </table>
-
-    <br>
-
-    <div class="total clearfix">
-      <span class="pull-right">
-         <span> 总计 <%= render_cart_total_price(current_cart) %> RMB  </span>
-      </span>
-    </div>
-
-    <hr>
-
-    <div class="checkout clearfix">
-      <%= link_to("确认结账", checkout_carts_path, method: :post, class: "btn btn-lg btn-danger pull-right") %>
     </div>
   </div>
 </div>

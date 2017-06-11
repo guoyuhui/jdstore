@@ -1,3 +1,53 @@
 // Place all the styles related to the carts controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.cart_items .product_content {
+  padding: 15px;
+}
+
+
+
+// 数量输入框
+.cart_items .product_quantity {
+  margin: auto;
+  padding: 40px;
+}
+
+.cart_items .product_quantity .cart-quantity-input {
+  color: #333;
+  text-align: center;
+  width: 60px;
+  font-weight: bold;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+}
+
+.cart_items .cart_product_delete {
+  padding: 40px;
+}
+
+.bill {
+  position: fixed;
+  right: 80px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  padding: 20px;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 15px 20px;
+}
+
+.bill .bill_title {
+  margin-bottom: 0px;
+  color: #959595;
+}
+
+.bill .total_price {
+  text-align: center;
+  color: #959595;
+  font-size: 18px;
+}
+
+.bill .cart_button {
+  margin: 20px;
+  text-align: center;
+}
