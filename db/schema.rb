@@ -31,14 +31,6 @@ ActiveRecord::Schema.define(version: 20170606173612) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "details", force: :cascade do |t|
-    t.integer  "product_id"
-    t.string   "avatar"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string   "graph"
-  end
-
   create_table "favorites", force: :cascade do |t|
     t.integer  "group_id"
     t.integer  "user_id"
@@ -73,12 +65,6 @@ ActiveRecord::Schema.define(version: 20170606173612) do
   create_table "photos", force: :cascade do |t|
     t.integer  "product_id"
     t.string   "avatar"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "posts", force: :cascade do |t|
-    t.string   "detail"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
